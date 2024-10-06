@@ -3,7 +3,7 @@ Description: This is an API with which you can send notifications to a larger nu
 
 ## Features:
 
-CRUD for contacts;
+  - CRUD for contacts;
   - loading multiple contacts using the API;
   - CRUD for notification templates;
   - sending emails and phone messages;
