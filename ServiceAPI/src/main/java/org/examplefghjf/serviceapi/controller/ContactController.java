@@ -42,7 +42,7 @@ public class ContactController {
     @PostMapping()
     public ResponseEntity<Contact> createContact(@RequestBody Contact contact){
         try {
-            return new ResponseEntity<>(contactService.createContact(contact), HttpStatus.CREATED);
+            return new ResponseEntity<>(contactService.createContact(contact), HttpStatus.OK);
         } catch (DuplicateDataException exception) {
             return new ResponseEntity<>(new Contact(),HttpStatus.BAD_REQUEST);
         }
@@ -65,7 +65,7 @@ public class ContactController {
             contactService.deleteContact(id);
             return new ResponseEntity<>("Удаление прошло успешно!",HttpStatus.OK);
         } catch (RuntimeException exception){
-            return new ResponseEntity<>(exception.getMessage().toString(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(exception.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 }

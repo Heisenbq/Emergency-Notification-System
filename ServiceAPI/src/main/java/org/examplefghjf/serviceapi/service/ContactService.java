@@ -21,7 +21,7 @@ public class ContactService {
         return contactRepository.findAll();
     }
 
-    public Contact getContactById(Long id){
+    public Contact getContactById(Long id) throws NoSuchElementException{
         return contactRepository.findById(id).orElseThrow();
     }
 
@@ -34,19 +34,22 @@ public class ContactService {
         }
     }
 
-    public Contact updateContact(Long id,Contact contact) throws NoSuchElementException {
+    public Contact updateContact(Long id,Contact contact) throws NoSuchElementException,DuplicateDataException {
         Contact existedContact = contactRepository.findById(id).orElseThrow();
         existedContact.setContactName(contact.getContactName());
         existedContact.setEmail(contact.getEmail());
         existedContact.setPhone(contact.getPhone());
         existedContact.setStatus(contact.getStatus());
 
-        contactRepository.save(existedContact);
-        return existedContact;
+        try {
+            return contactRepository.save(existedContact);
+        } catch (DataIntegrityViolationException exception) {
+            throw new DuplicateDataException("Уникальность каких то данных была нарушена!");
+        }
     }
 
-    public void deleteContact(Long id) throws RuntimeException {
-        if (contactRepository.findById(id).orElse(null)==null) throw new RuntimeException("нет такого значения");
+    public void deleteContact(Long id) throws NoSuchElementException {
+        contactRepository.findById(id).orElseThrow();
         contactRepository.deleteById(id);
     }
 }
