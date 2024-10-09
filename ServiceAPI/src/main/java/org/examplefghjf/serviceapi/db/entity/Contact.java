@@ -1,16 +1,21 @@
 package org.examplefghjf.serviceapi.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "contacts")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "contact_id")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
     private String contactName;
     private String email;
@@ -18,7 +23,9 @@ public class Contact {
 
 //  можно выставить активный контакт или нет
     private String status;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Timestamp createdAt;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Timestamp updatedAt;
 
     public Long getId() {

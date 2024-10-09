@@ -4,7 +4,6 @@ import org.examplefghjf.serviceapi.db.entity.Contact;
 import org.examplefghjf.serviceapi.db.repository.ContactRepository;
 import org.examplefghjf.serviceapi.exception.DuplicateDataException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +25,8 @@ public class ContactService {
         return contactRepository.findById(id).orElseThrow();
     }
 
-    public Contact createContact(Contact contact) throws DuplicateDataException{
+    public Contact createContact(Contact contact) throws DuplicateDataException , IllegalArgumentException{
+        if (contact.getId()!=null) throw new IllegalArgumentException("В теле запроса не должно быть id!");
         try {
             return contactRepository.save(contact);
         } catch (DataIntegrityViolationException exception) {
