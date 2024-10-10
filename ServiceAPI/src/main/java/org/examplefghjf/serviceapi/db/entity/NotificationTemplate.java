@@ -18,6 +18,8 @@ public class NotificationTemplate {
     private Long id;
 
     private String name;
+
+    @Column(name = "body")
     private String text;
     // куда отправлять mail or sms
     private String type;
