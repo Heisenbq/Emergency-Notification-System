@@ -16,7 +16,7 @@ import java.util.NoSuchElementException;
 
 @Tag(name = "ContactController", description = "CRUD операции над контактами")
 @RestController
-@RequestMapping("/contact")
+@RequestMapping("/contacts")
 public class ContactController {
     private final ContactService contactService;
 
