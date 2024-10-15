@@ -1,6 +1,5 @@
-package org.examplefghjf.serviceapi.db.entity;
+package org.coursework.notificationservice.db.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -11,19 +10,15 @@ import java.util.Set;
 
 @Entity
 @Table(name = "groups")
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Column(name = "group_id")
     private Long id;
 
     private String groupName;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Timestamp createdAt;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ManyToMany
     @JoinTable(
             name = "contactgroup",
