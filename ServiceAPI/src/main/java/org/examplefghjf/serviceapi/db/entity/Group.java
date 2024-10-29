@@ -25,6 +25,7 @@ public class Group {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ManyToMany
+
     @JoinTable(
             name = "contactgroup",
             joinColumns = @JoinColumn(name = "group_id"),
