@@ -40,8 +40,8 @@ public class EmailService implements NotificationService{
         Group group = groupRepository.findById(Long.parseLong(groupId)).orElseThrow();
         NotificationTemplate notificationTemplate = notificationTemplateRepository.findById(Long.parseLong(templateId)).orElseThrow();
         Set<Contact> contactsInGroup = group.getContacts();
-
         String message = notificationTemplate.getText();
+
         // send notification
         contactsInGroup.stream().
                 forEach(

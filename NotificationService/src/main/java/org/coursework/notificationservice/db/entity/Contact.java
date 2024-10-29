@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "contacts")
@@ -86,5 +87,18 @@ public class Contact {
                 ", createdAt=" + createdAt +
                 ", updateAt=" + updatedAt +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contact contact = (Contact) o;
+        return Objects.equals(id, contact.id) && Objects.equals(contactName, contact.contactName) && Objects.equals(email, contact.email) && Objects.equals(phone, contact.phone) && Objects.equals(status, contact.status) && Objects.equals(createdAt, contact.createdAt) && Objects.equals(updatedAt, contact.updatedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, contactName, email, phone, status, createdAt, updatedAt);
     }
 }

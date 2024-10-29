@@ -1,5 +1,8 @@
 package org.coursework.notificationservice.kafka;
 
+import org.coursework.notificationservice.db.entity.Contact;
+import org.coursework.notificationservice.db.entity.Group;
+import org.coursework.notificationservice.db.repository.GroupRepository;
 import org.coursework.notificationservice.senderService.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -8,16 +11,21 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class NotificationConsumer {
 
     private final EmailService emailService;
 
+    private final GroupRepository groupRepository;
+
 
     @Autowired
-    public NotificationConsumer(EmailService emailService) {
+    public NotificationConsumer(EmailService emailService,GroupRepository groupRepository) {
         this.emailService = emailService;
+        this.groupRepository = groupRepository;
     }
 
     @KafkaListener(topics = "notifications",groupId = "consumer1")
@@ -25,15 +33,8 @@ public class NotificationConsumer {
         System.out.println(message.toString());
         String groupId = message.get("group_id");
         String templateId = message.get("template_id");
-
-
-
-//        emailService.send("a.gadjiev1@mail.ru","uiuiu","hyila");
-
-
         try {
             emailService.sendNotificationToGroup(groupId,templateId);
-//            emailService.send("a.gadjiev1@mail.ru","uiuiu","hyila");
         } catch (NoSuchElementException ex) {
             ex.printStackTrace();
         } catch (MailSendException ex){

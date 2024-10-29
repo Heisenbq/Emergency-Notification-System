@@ -19,7 +19,7 @@ public class Group {
     private String groupName;
     private Timestamp createdAt;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "contactgroup",
             joinColumns = @JoinColumn(name = "group_id"),
