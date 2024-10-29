@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.examplefghjf.serviceapi.db.entity.Contact;
 import org.examplefghjf.serviceapi.db.entity.Group;
 import org.examplefghjf.serviceapi.exception.DuplicateDataException;
+import org.examplefghjf.serviceapi.kafka.KafkaService;
 import org.examplefghjf.serviceapi.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,10 +20,11 @@ import java.util.List;
 @RequestMapping("/groups")
 public class GroupController {
     private final GroupService groupService;
-
+    private final KafkaService kafkaService;
     @Autowired
-    public GroupController(GroupService groupService) {
+    public GroupController(GroupService groupService,KafkaService kafkaService) {
         this.groupService = groupService;
+        this.kafkaService = kafkaService;
     }
 
     @Operation(summary = "получить список групп")
@@ -94,7 +96,7 @@ public class GroupController {
         }
     }
 
-    @Operation(summary = "Отправление сообщения всем пользователям")
+    @Operation(summary = "Отправление сообщения всем пользователям (Перадача инфы сервису нотификаций по кафке)")
     @PostMapping("/{group_id}/notification/{template_id}")
     public void sendNotification(
             @PathVariable(name = "group_id") Long groupId,
@@ -104,7 +106,7 @@ public class GroupController {
         hashMap.put("group_id",groupId.toString());
         hashMap.put("template_id",templateId.toString());
 
-        groupService.send(hashMap);
+        kafkaService.send(hashMap);
 
     }
 }

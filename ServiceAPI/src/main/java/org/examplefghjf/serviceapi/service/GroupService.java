@@ -21,13 +21,11 @@ public class GroupService {
     private final GroupRepository groupRepository;
     private final ContactRepository contactRepository;
 
-    private final KafkaProducer kafkaProducer;;
 
     @Autowired
-    public GroupService(GroupRepository groupRepository, ContactRepository contactRepository,KafkaProducer kafkaProducer) {
+    public GroupService(GroupRepository groupRepository, ContactRepository contactRepository) {
         this.groupRepository = groupRepository;
         this.contactRepository = contactRepository;
-        this.kafkaProducer = kafkaProducer;
     }
 
     public List<Group> getAllGroups(){
@@ -74,10 +72,5 @@ public class GroupService {
     public void deleteGroup(Long id) throws  NoSuchElementException{
         groupRepository.findById(id).orElseThrow();
         groupRepository.deleteById(id);
-    }
-
-    // kafkaSender
-    public void send(HashMap<String, String> message){
-        kafkaProducer.sendMessage(message);
     }
 }
