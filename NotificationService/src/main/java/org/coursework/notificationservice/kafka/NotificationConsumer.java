@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import javax.management.Notification;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,7 +30,7 @@ public class NotificationConsumer {
     @KafkaListener(topics = "notifications",groupId = "consumer1")
     public void listen(Map<String,String> message){
         System.out.println(message.toString());
-       sendNotificationToGroup(message.get("group_id"),message.get("template_id"));
+        //sendNotificationToGroup(message.get("group_id"),message.get("template_id"));
 
         sendNotification("ty gandon");
     }

@@ -105,5 +105,6 @@ public class GroupController {
         hashMap.put("template_id",templateId.toString());
 
         groupService.send(hashMap);
+
     }
 }
