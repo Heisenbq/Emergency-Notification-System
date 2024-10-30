@@ -1,6 +1,6 @@
-package org.examplefghjf.serviceapi.db.repository;
+package org.coursework.notificationservice.db.repository;
 
-import org.examplefghjf.serviceapi.db.entity.NotificationSession;
+import org.coursework.notificationservice.db.entity.NotificationSession;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

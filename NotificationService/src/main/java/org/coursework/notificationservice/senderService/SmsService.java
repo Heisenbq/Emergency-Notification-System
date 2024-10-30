@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SmsService implements NotificationService{
     @Override
-    public void sendNotificationToGroup(String groupId, String templateId) {
+    public void sendNotificationToGroup(Long groupId, Long templateId) {
 
     }
 }

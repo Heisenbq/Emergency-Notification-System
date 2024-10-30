@@ -36,9 +36,9 @@ public class EmailService implements NotificationService{
     }
 
     @Override
-    public void sendNotificationToGroup(String groupId, String templateId) throws NoSuchElementException, MailSendException {
-        Group group = groupRepository.findById(Long.parseLong(groupId)).orElseThrow();
-        NotificationTemplate notificationTemplate = notificationTemplateRepository.findById(Long.parseLong(templateId)).orElseThrow();
+    public void sendNotificationToGroup(Long groupId, Long templateId) throws RuntimeException {
+        Group group = groupRepository.findById(groupId).orElseThrow();
+        NotificationTemplate notificationTemplate = notificationTemplateRepository.findById(templateId).orElseThrow();
         Set<Contact> contactsInGroup = group.getContacts();
         String message = notificationTemplate.getText();
         // send notification
