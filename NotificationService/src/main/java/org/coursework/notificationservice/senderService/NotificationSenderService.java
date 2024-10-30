@@ -1,5 +1,5 @@
 package org.coursework.notificationservice.senderService;
 
-public interface NotificationService {
+public interface NotificationSenderService {
     void sendNotificationToGroup(Long groupId,Long templateId);
 }

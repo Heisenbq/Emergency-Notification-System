@@ -33,6 +33,7 @@ public class NotificationConsumer {
             notificationSessionService.createSession(groupId,templateId);
             emailService.sendNotificationToGroup(groupId,templateId);
         } catch (RuntimeException ex){
+
             System.out.println(ex.getMessage());
         }
     }

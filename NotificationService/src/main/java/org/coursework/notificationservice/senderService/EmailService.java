@@ -5,26 +5,28 @@ import org.coursework.notificationservice.db.entity.Group;
 import org.coursework.notificationservice.db.entity.NotificationTemplate;
 import org.coursework.notificationservice.db.repository.GroupRepository;
 import org.coursework.notificationservice.db.repository.NotificationTemplateRepository;
+import org.coursework.notificationservice.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 @Service
-public class EmailService implements NotificationService{
+public class EmailService implements NotificationSenderService {
     private final JavaMailSender mailSender;
     private final NotificationTemplateRepository notificationTemplateRepository;
     private final GroupRepository groupRepository;
 
+    private  final NotificationService notificationService;
+
     @Autowired
-    public EmailService(JavaMailSender mailSender, NotificationTemplateRepository notificationTemplateRepository, GroupRepository groupRepository) {
+    public EmailService(JavaMailSender mailSender, NotificationTemplateRepository notificationTemplateRepository, GroupRepository groupRepository, NotificationService notificationService) {
         this.mailSender = mailSender;
         this.notificationTemplateRepository = notificationTemplateRepository;
         this.groupRepository = groupRepository;
+        this.notificationService = notificationService;
     }
 
     public void send(String toAddress,String subject,String message){
@@ -36,7 +38,7 @@ public class EmailService implements NotificationService{
     }
 
     @Override
-    public void sendNotificationToGroup(Long groupId, Long templateId) throws RuntimeException {
+    public void sendNotificationToGroup(Long groupId, Long templateId)  {
         Group group = groupRepository.findById(groupId).orElseThrow();
         NotificationTemplate notificationTemplate = notificationTemplateRepository.findById(templateId).orElseThrow();
         Set<Contact> contactsInGroup = group.getContacts();
@@ -44,9 +46,18 @@ public class EmailService implements NotificationService{
         // send notification
         contactsInGroup.stream().
                 forEach(
-                        contact -> send(contact.getEmail(),
-                                notificationTemplate.getName(),
-                                contact.getContactName() + "! " + message)
+                        contact -> {
+
+                                try {
+                                    send(contact.getEmail(),
+                                            notificationTemplate.getName(),
+                                            contact.getContactName() + "! " + message);
+                                } catch (RuntimeException exception) {
+
+                                    System.err.println(exception.getMessage());
+                                }
+
+                        }
                 );
     }
 }
