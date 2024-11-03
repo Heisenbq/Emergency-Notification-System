@@ -15,7 +15,7 @@ public class Notification {
 
     private Long sessionId;
     private Long contactId;
-    @Enumerated(EnumType.STRING)
+
     private String status;
     private String errorMessage;
     private Integer sendAttempts;

@@ -15,12 +15,10 @@ import java.util.NoSuchElementException;
 public class NotificationConsumer {
 
     private final EmailService emailService;
-    private final NotificationSessionService notificationSessionService;
 
     @Autowired
-    public NotificationConsumer(EmailService emailService,NotificationSessionService notificationSessionService) {
+    public NotificationConsumer(EmailService emailService) {
         this.emailService = emailService;
-        this.notificationSessionService = notificationSessionService;
     }
 
     @KafkaListener(topics = "notifications",groupId = "consumer1")
@@ -29,13 +27,8 @@ public class NotificationConsumer {
         Long groupId = Long.parseLong(message.get("group_id"));
         Long templateId = Long.parseLong(message.get("template_id"));
 
-        try {
-            notificationSessionService.createSession(groupId,templateId);
-            emailService.sendNotificationToGroup(groupId,templateId);
-        } catch (RuntimeException ex){
+        emailService.sendNotificationToGroup(groupId,templateId);
 
-            System.out.println(ex.getMessage());
-        }
     }
 
 }

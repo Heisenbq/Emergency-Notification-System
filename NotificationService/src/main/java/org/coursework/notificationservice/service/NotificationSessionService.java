@@ -1,5 +1,6 @@
 package org.coursework.notificationservice.service;
 
+import org.coursework.notificationservice.Enums.NotificationSessionStatus;
 import org.coursework.notificationservice.db.entity.NotificationSession;
 import org.coursework.notificationservice.db.repository.NotificationSessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +23,13 @@ public class NotificationSessionService {
             throw new DataIntegrityViolationException("Уникальность каких то данных была нарушена!");
         }
     }
-    public void createSession(Long groupId,Long templateId) throws RuntimeException{
+    public NotificationSession createSession(Long groupId,Long templateId) throws RuntimeException{
         try {
             NotificationSession notificationSession = new NotificationSession();
             notificationSession.setGroupId(groupId);
             notificationSession.setTemplateId(templateId);
-            notificationSession.setStatus("pending");
-
-            notificationSessionRepository.save(notificationSession);
+            notificationSession.setStatus(NotificationSessionStatus.PENDING.getStatus());
+            return notificationSessionRepository.save(notificationSession);
         } catch (DataIntegrityViolationException exception) {
             throw new DataIntegrityViolationException("Уникальность каких то данных была нарушена!");
         }

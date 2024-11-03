@@ -26,6 +26,8 @@ public class NotificationService {
 
     public void createNotification(Long sessionId, Long contactId, NotificationStatus status,String errorMessage){
         Notification notification = new Notification();
+        notification.setSessionId(sessionId);
+        notification.setContactId(contactId);
         notification.setStatus(status.toString().toLowerCase());
         notification.setErrorMessage(errorMessage);
 
