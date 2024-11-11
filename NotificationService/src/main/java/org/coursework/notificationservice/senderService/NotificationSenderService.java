@@ -33,13 +33,12 @@ public abstract class NotificationSenderService {
         NotificationSession notificationSession = notificationSessionService.createSession(groupId,templateId);
 
         // send notification
-        String type = notificationTemplate.getType();
         contactsInGroup.stream().
                 forEach(
                         contact -> {
 
                             try {
-                                send(contact.getEmail(),
+                                send(contact,
                                         notificationTemplate.getName(),
                                         contact.getContactName() + "! " + message);
 
@@ -55,5 +54,5 @@ public abstract class NotificationSenderService {
                 );
     }
 
-    abstract void send(String toAddress,String subject,String message);
+    abstract void send(Contact contact,String subject,String message);
 }
