@@ -19,11 +19,6 @@ import java.util.Set;
 @Service
 public class EmailService extends NotificationSenderService {
     private final JavaMailSender mailSender;
-    private final NotificationTemplateRepository notificationTemplateRepository;
-    private final GroupRepository groupRepository;
-
-
-
 
     @Autowired
     public EmailService(JavaMailSender mailSender, NotificationTemplateRepository notificationTemplateRepository, GroupRepository groupRepository) {
@@ -32,7 +27,8 @@ public class EmailService extends NotificationSenderService {
         this.groupRepository = groupRepository;
     }
 
-    private void send(String toAddress,String subject,String message){
+    @Override
+    public void send(String toAddress,String subject,String message){
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(toAddress);
         mailMessage.setSubject(subject);
@@ -40,35 +36,35 @@ public class EmailService extends NotificationSenderService {
         mailSender.send(mailMessage);
     }
 
-    @Override
-    public void sendNotificationToGroup(Long groupId, Long templateId)  {
-        Group group = groupRepository.findById(groupId).orElseThrow();
-        NotificationTemplate notificationTemplate = notificationTemplateRepository.findById(templateId).orElseThrow();
-        Set<Contact> contactsInGroup = group.getContacts();
-        String message = notificationTemplate.getText();
-
-        // создание сессии нотификации
-        NotificationSession notificationSession = notificationSessionService.createSession(groupId,templateId);
-
-        // send notification
-        contactsInGroup.stream().
-                forEach(
-                        contact -> {
-
-                                try {
-                                    send(contact.getEmail(),
-                                            notificationTemplate.getName(),
-                                            contact.getContactName() + "! " + message);
-
-                                    // создание информации о нотификации
-                                    notificationService.createNotification(notificationSession.getId(),contact.getId(), NotificationStatus.SENT,"дошло жиесть");
-                                } catch (RuntimeException exception) {
-                                    // создание информации о нотификации
-                                    notificationService.createNotification(notificationSession.getId(),contact.getId(), NotificationStatus.FAILED,"не дошло жиесть");
-                                    System.err.println(exception.getMessage());
-                                }
-
-                        }
-                );
-    }
+//    @Override
+//    public void sendNotificationToGroup(Long groupId, Long templateId)  {
+//        Group group = groupRepository.findById(groupId).orElseThrow();
+//        NotificationTemplate notificationTemplate = notificationTemplateRepository.findById(templateId).orElseThrow();
+//        Set<Contact> contactsInGroup = group.getContacts();
+//        String message = notificationTemplate.getText();
+//
+//        // создание сессии нотификации
+//        NotificationSession notificationSession = notificationSessionService.createSession(groupId,templateId);
+//
+//        // send notification
+//        contactsInGroup.stream().
+//                forEach(
+//                        contact -> {
+//
+//                                try {
+//                                    send(contact.getEmail(),
+//                                            notificationTemplate.getName(),
+//                                            contact.getContactName() + "! " + message);
+//
+//                                    // создание информации о нотификации
+//                                    notificationService.createNotification(notificationSession.getId(),contact.getId(), NotificationStatus.SENT,"дошло жиесть");
+//                                } catch (RuntimeException exception) {
+//                                    // создание информации о нотификации
+//                                    notificationService.createNotification(notificationSession.getId(),contact.getId(), NotificationStatus.FAILED,"не дошло жиесть");
+//                                    System.err.println(exception.getMessage());
+//                                }
+//
+//                        }
+//                );
+//    }
 }
