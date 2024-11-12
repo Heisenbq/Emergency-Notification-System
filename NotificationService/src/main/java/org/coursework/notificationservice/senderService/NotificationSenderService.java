@@ -18,19 +18,13 @@ public abstract class NotificationSenderService {
     protected NotificationService notificationService;
     @Autowired
     protected NotificationSessionService notificationSessionService;
-    @Autowired
-    protected NotificationTemplateRepository notificationTemplateRepository;
-    @Autowired
-    protected GroupRepository groupRepository;
 
-    public final void sendNotificationToGroup(Long groupId, Long templateId)  {
-        Group group = groupRepository.findById(groupId).orElseThrow();
-        NotificationTemplate notificationTemplate = notificationTemplateRepository.findById(templateId).orElseThrow();
+    public final void sendNotificationToGroup(Group group, NotificationTemplate notificationTemplate)  {
         Set<Contact> contactsInGroup = group.getContacts();
         String message = notificationTemplate.getText();
 
         // создание сессии нотификации
-        NotificationSession notificationSession = notificationSessionService.createSession(groupId,templateId);
+        NotificationSession notificationSession = notificationSessionService.createSession(group.getId(),notificationTemplate.getId());
 
         // send notification
         contactsInGroup.stream().

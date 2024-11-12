@@ -38,5 +38,6 @@ public class SmsService extends NotificationSenderService {
 
         // Отправка POST-запроса
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+        System.out.println(response);
     }
 }
