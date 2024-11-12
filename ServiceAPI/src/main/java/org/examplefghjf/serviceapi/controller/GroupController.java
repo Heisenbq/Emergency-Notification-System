@@ -3,9 +3,11 @@ package org.examplefghjf.serviceapi.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.examplefghjf.serviceapi.db.entity.Group;
+import org.examplefghjf.serviceapi.db.entity.NotificationTemplate;
 import org.examplefghjf.serviceapi.exception.DuplicateDataException;
 import org.examplefghjf.serviceapi.kafka.KafkaService;
 import org.examplefghjf.serviceapi.service.GroupService;
+import org.examplefghjf.serviceapi.service.NotificationTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +23,12 @@ public class GroupController {
     private final GroupService groupService;
     private final KafkaService kafkaService;
 
+    private final NotificationTemplateService notificationTemplateService;
     @Autowired
-    public GroupController(GroupService groupService,KafkaService kafkaService) {
+    public GroupController(GroupService groupService,KafkaService kafkaService,NotificationTemplateService notificationTemplateService) {
         this.groupService = groupService;
         this.kafkaService = kafkaService;
+        this.notificationTemplateService=notificationTemplateService;
     }
 
     @Operation(summary = "получить список групп")
@@ -102,11 +106,6 @@ public class GroupController {
             @PathVariable(name = "group_id") Long groupId,
             @PathVariable(name = "template_id") Long templateId
     ){
-        HashMap<String,String> hashMap=new HashMap<>();
-        hashMap.put("group_id",groupId.toString());
-        hashMap.put("template_id",templateId.toString());
-
-        kafkaService.send(hashMap);
-
+        kafkaService.send(groupService.getGroup(groupId),notificationTemplateService.getTemplate(templateId));
     }
 }
