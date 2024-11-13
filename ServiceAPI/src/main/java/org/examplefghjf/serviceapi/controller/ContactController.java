@@ -42,6 +42,7 @@ public class ContactController {
     @PostMapping()
     public ResponseEntity<Contact> createContact(@RequestBody Contact contact){
         try {
+//            return ResponseEntity.status(HttpStatus.CREATED).body(contactService.createContact(contact));
             return new ResponseEntity<>(contactService.createContact(contact), HttpStatus.OK);
         } catch (DuplicateDataException exception) {
             return new ResponseEntity<>(new Contact(),HttpStatus.BAD_REQUEST);
