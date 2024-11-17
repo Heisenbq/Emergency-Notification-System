@@ -46,6 +46,7 @@ public class NotificationConsumer {
             }
             case "sms": {
                 smsService.sendNotificationToGroup(group,template);
+                break;
             }
         }
     }
