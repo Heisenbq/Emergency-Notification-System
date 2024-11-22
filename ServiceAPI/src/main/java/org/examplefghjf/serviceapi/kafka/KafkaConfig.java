@@ -19,20 +19,7 @@ public class KafkaConfig {
 
     @Bean
     public NewTopic newTopic(){
-        return new NewTopic("notifications",5,(short ) 1);
+        return new NewTopic("notifications",5,(short) 1);
     }
 
-//    @Bean
-//    public KafkaTemplate<String,String> kafkaTemplate(ObjectMapper objectMapper) {
-//        return new KafkaTemplate<>(producerFactory(objectMapper));
-//    }
-//
-//    @Bean
-//    public ProducerFactory<String,String> producerFactory(ObjectMapper objectMapper) {
-//        Map<String, Object> configProps = new HashMap<>();
-//        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-//        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-//        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-//        return new DefaultKafkaProducerFactory<>(configProps, new StringSerializer(), new JsonSerializer<>(objectMapper));
-//    }
 }

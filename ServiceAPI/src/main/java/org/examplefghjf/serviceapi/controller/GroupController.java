@@ -106,6 +106,7 @@ public class GroupController {
             @PathVariable(name = "group_id") Long groupId,
             @PathVariable(name = "template_id") Long templateId
     ){
-        kafkaService.send(groupService.getGroup(groupId),notificationTemplateService.getTemplate(templateId));
+//        kafkaService.send(groupService.getGroup(groupId),notificationTemplateService.getTemplate(templateId));
+        kafkaService.send(groupId,templateId);
     }
 }
