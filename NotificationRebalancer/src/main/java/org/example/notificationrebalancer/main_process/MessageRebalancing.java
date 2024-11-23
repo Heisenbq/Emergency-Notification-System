@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.notificationrebalancer.Enums.NotificationStatus;
 import org.example.notificationrebalancer.db.entity.Contact;
 import org.example.notificationrebalancer.db.entity.Notification;
+import org.example.notificationrebalancer.db.entity.NotificationSession;
 import org.example.notificationrebalancer.kafka.KafkaService;
 import org.example.notificationrebalancer.service.ContactService;
 import org.example.notificationrebalancer.service.NotificationService;
+import org.example.notificationrebalancer.service.NotificationSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -19,14 +21,17 @@ public class MessageRebalancing {
     private final KafkaService kafkaService;
     private final NotificationService notificationService;
     private final ContactService contactService;
+    private final NotificationSessionService notificationSessionService;
 
     @Autowired
-    public MessageRebalancing(KafkaService kafkaService, NotificationService notificationService,ContactService contactService) {
+    public MessageRebalancing(KafkaService kafkaService, NotificationService notificationService,ContactService contactService,NotificationSessionService notificationSessionService) {
         this.kafkaService = kafkaService;
         this.notificationService = notificationService;
         this.contactService = contactService;
+        this.notificationSessionService = notificationSessionService;
     }
 
+    // once in 5 sec
     @Scheduled(fixedRate = 5000)
     public void rebalanceMessages() {
         try {
@@ -34,6 +39,7 @@ public class MessageRebalancing {
             List<Contact> contacts = new ArrayList<>();
             notifications.stream()
                     .forEach(notification -> {
+                        notificationSessionService.getNotificationSessionById(notification.getSessionId()).getTemplateId();
                         contacts.add(contactService.getContactById(notification.getContactId()));
                     });
             ObjectMapper objectMapper = new ObjectMapper();
