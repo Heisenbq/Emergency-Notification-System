@@ -20,14 +20,11 @@ public class KafkaService {
     }
 
 
-    public void send (Group group,NotificationTemplate template) {
-        ObjectMapper objectMapper = new ObjectMapper();
+    public void send(Long groupId,Long templateId) {
         try {
-            String groupSerialize = objectMapper.writeValueAsString(group);
-            String templateSerialize = objectMapper.writeValueAsString(template);
             Map<String,String> map = new HashMap<>();
-            map.put("group",groupSerialize);
-            map.put("template",templateSerialize);
+            map.put("group",groupId.toString());
+            map.put("template",templateId.toString());
             kafkaProducer.sendMessage(map);
         }catch (Exception ex){
             System.err.println(ex);

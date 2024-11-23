@@ -6,7 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @Service
 public class KafkaProducer {
@@ -18,6 +22,9 @@ public class KafkaProducer {
     }
 
     public void sendMessage(Map<String, String> message) {
-        kafkaTemplate.send("notifications","key1",message );
+        List<String> keys = Arrays.asList("key1", "key2", "key3", "key4", "key5");
+        Random random = new Random();
+        String key = keys.get(random.nextInt(keys.size()));
+        kafkaTemplate.send("notifications",key,message);
     }
 }

@@ -37,13 +37,13 @@ public class NotificationConsumer {
         this.notificationTemplateRepository = notificationTemplateRepository;
     }
 
-    @KafkaListener(topics = "notifications",groupId = "consumer1")
-    public void listen(Map<String,String> message) throws JsonProcessingException {
+    @KafkaListener(topics = "notifications",groupId = "consumer1",concurrency = "5")
+    public void listen(Map<String,String> message) throws RuntimeException {
         System.out.println(message.toString());
         Group group = groupRepository
-                .findById(Long.parseLong(message.get("group"))).orElseThrow();
+                .findById(Long.parseLong(message.get("group_id"))).orElseThrow();
         NotificationTemplate template = notificationTemplateRepository
-                .findById(Long.parseLong(message.get("template"))).orElseThrow();
+                .findById(Long.parseLong(message.get("template_id"))).orElseThrow();
 
         switch (template.getType().toLowerCase()){
             case "email":{

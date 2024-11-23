@@ -35,8 +35,8 @@ public class KafkaService {
     public void send (Long groupId,Long templateId) {
         try {
             Map<String,String> map = new HashMap<>();
-            map.put("group",groupId.toString());
-            map.put("template",templateId.toString());
+            map.put("group_id",groupId.toString());
+            map.put("template_id",templateId.toString());
             kafkaProducer.sendMessage(map);
         }catch (Exception ex){
             System.err.println(ex);
