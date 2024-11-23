@@ -16,6 +16,6 @@ public class KafkaProducer {
     }
 
     public void sendMessage(Map<String, String> message) {
-        kafkaTemplate.send("notifications","key1",message);
+        kafkaTemplate.send("retry_notifications","key1",message);
     }
 }
