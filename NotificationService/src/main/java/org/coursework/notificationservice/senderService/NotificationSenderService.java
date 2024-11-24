@@ -1,10 +1,7 @@
 package org.coursework.notificationservice.senderService;
 
 import org.coursework.notificationservice.Enums.NotificationStatus;
-import org.coursework.notificationservice.db.entity.Contact;
-import org.coursework.notificationservice.db.entity.Group;
-import org.coursework.notificationservice.db.entity.NotificationSession;
-import org.coursework.notificationservice.db.entity.NotificationTemplate;
+import org.coursework.notificationservice.db.entity.*;
 import org.coursework.notificationservice.db.repository.GroupRepository;
 import org.coursework.notificationservice.db.repository.NotificationTemplateRepository;
 import org.coursework.notificationservice.service.NotificationService;
@@ -37,10 +34,10 @@ public abstract class NotificationSenderService {
                                         contact.getContactName() + "! " + message);
 
                                 // создание информации о нотификации
-                                notificationService.createNotification(notificationSession.getId(),contact.getId(), NotificationStatus.SENT,"дошло жиесть");
+                                notificationService.createNotificationInfo(notificationSession.getId(),contact.getId(), NotificationStatus.SENT,"дошло жиесть");
                             } catch (RuntimeException exception) {
                                 // создание информации о нотификации
-                                notificationService.createNotification(notificationSession.getId(),contact.getId(), NotificationStatus.FAILED,"не дошло жиесть");
+                                notificationService.createNotificationInfo(notificationSession.getId(),contact.getId(), NotificationStatus.FAILED,"не дошло жиесть");
                                 System.err.println(exception.getMessage());
                             }
 
@@ -48,5 +45,14 @@ public abstract class NotificationSenderService {
                 );
     }
 
+    public void resend(Contact contact, Notification notification, String subject, String message) {
+        try {
+            send(contact,subject,message);
+            notificationService.updateStatus(notification,NotificationStatus.SENT);
+        }catch (RuntimeException exception) {
+            notificationService.updateStatus(notification,NotificationStatus.FAILED);
+            System.out.println("------------ASDDDDDDDDDDDD-----------");;
+        }
+    }
     abstract void send(Contact contact,String subject,String message);
 }

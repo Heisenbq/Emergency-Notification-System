@@ -1,5 +1,7 @@
 package org.coursework.notificationservice.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
@@ -14,6 +16,7 @@ public class Notification {
     private Long id;
 
     private Long sessionId;
+
     private Long contactId;
 
     private String status;

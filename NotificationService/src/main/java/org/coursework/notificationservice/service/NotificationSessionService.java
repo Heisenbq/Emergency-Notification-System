@@ -29,6 +29,7 @@ public class NotificationSessionService {
             notificationSession.setGroupId(groupId);
             notificationSession.setTemplateId(templateId);
             notificationSession.setStatus(NotificationSessionStatus.PENDING.getStatus());
+
             return notificationSessionRepository.save(notificationSession);
         } catch (DataIntegrityViolationException exception) {
             throw new DataIntegrityViolationException("Уникальность каких то данных была нарушена!");

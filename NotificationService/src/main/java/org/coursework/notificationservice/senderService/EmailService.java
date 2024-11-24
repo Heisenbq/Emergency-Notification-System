@@ -1,10 +1,7 @@
 package org.coursework.notificationservice.senderService;
 
 import org.coursework.notificationservice.Enums.NotificationStatus;
-import org.coursework.notificationservice.db.entity.Contact;
-import org.coursework.notificationservice.db.entity.Group;
-import org.coursework.notificationservice.db.entity.NotificationSession;
-import org.coursework.notificationservice.db.entity.NotificationTemplate;
+import org.coursework.notificationservice.db.entity.*;
 import org.coursework.notificationservice.db.repository.GroupRepository;
 import org.coursework.notificationservice.db.repository.NotificationTemplateRepository;
 import org.coursework.notificationservice.service.NotificationService;

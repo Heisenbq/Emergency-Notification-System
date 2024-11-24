@@ -22,7 +22,7 @@ public class SmsService extends NotificationSenderService {
     }
 
     @Override
-    void send(Contact contact, String subject, String message) {
+    public void send(Contact contact, String subject, String message) {
         // Формируем URL и параметры запроса
         String url = apiUrl + "/send"; // Пример: /send
 

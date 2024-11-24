@@ -2,14 +2,13 @@ package org.coursework.notificationservice.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.coursework.notificationservice.db.entity.Group;
-import org.coursework.notificationservice.db.entity.NotificationSession;
-import org.coursework.notificationservice.db.entity.NotificationTemplate;
+import org.coursework.notificationservice.db.entity.*;
 import org.coursework.notificationservice.db.repository.GroupRepository;
 import org.coursework.notificationservice.db.repository.NotificationTemplateRepository;
 import org.coursework.notificationservice.senderService.EmailService;
 import org.coursework.notificationservice.senderService.NotificationSenderService;
 import org.coursework.notificationservice.senderService.SmsService;
+import org.coursework.notificationservice.service.NotificationService;
 import org.coursework.notificationservice.service.NotificationSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -38,7 +37,7 @@ public class NotificationConsumer {
     }
 
     @KafkaListener(topics = "notifications",groupId = "consumer1",concurrency = "5")
-    public void listen(Map<String,String> message) throws RuntimeException {
+    public void sender(Map<String,String> message) throws RuntimeException {
         System.out.println(message.toString());
         Group group = groupRepository
                 .findById(Long.parseLong(message.get("group_id"))).orElseThrow();
@@ -52,6 +51,24 @@ public class NotificationConsumer {
             }
             case "sms": {
                 smsService.sendNotificationToGroup(group,template);
+                break;
+            }
+        }
+    }
+
+    @KafkaListener(topics = "retry_notifications",groupId = "consumer2")
+    public void retry(Map<String,String> message) throws Exception{
+        ObjectMapper objectMapper = new ObjectMapper();
+        Notification notification = NotificationService.parseFromJsonRetryMessages(message.get("notification"));
+        Contact contact = NotificationService.getContactOfNotificationByJSON(message.get("notification"));
+        NotificationTemplate template = objectMapper.readValue(message.get("template"), NotificationTemplate.class);
+        switch (template.getType().toLowerCase()){
+            case "email":{
+                emailService.resend(contact,notification,template.getName(), template.getText());
+                break;
+            }
+            case "sms": {
+                smsService.resend(contact,notification,template.getName(), template.getText());
                 break;
             }
         }
