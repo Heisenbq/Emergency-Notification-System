@@ -20,10 +20,6 @@ public class Contact {
     //  можно выставить активный контакт или нет
     private String status;
 
-    private Timestamp createdAt;
-
-    private Timestamp updatedAt;
-
     public Long getId() {
         return id;
     }
@@ -64,39 +60,5 @@ public class Contact {
         this.status = status;
     }
 
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
 
-
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
-
-
-    @Override
-    public String toString() {
-        return "ContactEntity{" +
-                "id=" + id +
-                ", contactName='" + contactName + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", status='" + status + '\'' +
-                ", createdAt=" + createdAt +
-                ", updateAt=" + updatedAt +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Contact contact = (Contact) o;
-        return Objects.equals(id, contact.id) && Objects.equals(contactName, contact.contactName) && Objects.equals(email, contact.email) && Objects.equals(phone, contact.phone) && Objects.equals(status, contact.status) && Objects.equals(createdAt, contact.createdAt) && Objects.equals(updatedAt, contact.updatedAt);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, contactName, email, phone, status, createdAt, updatedAt);
-    }
 }

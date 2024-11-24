@@ -15,9 +15,7 @@ public class NotificationSession {
     private Long templateId;
     private Long groupId;
     private String status;
-    private Timestamp createdAt;
-    private Timestamp startedAt;
-    private Timestamp completedAt;
+
 
     public Long getId() {
         return id;
@@ -51,28 +49,4 @@ public class NotificationSession {
         this.status = status;
     }
 
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Timestamp getStartedAt() {
-        return startedAt;
-    }
-
-    @PrePersist
-    public void onCreatedAt() {
-        this.createdAt = Timestamp.valueOf(LocalDateTime.now());
-    }
-
-    public Timestamp getCompletedAt() {
-        return completedAt;
-    }
-
-    public void setCompletedAt(Timestamp completedAt) {
-        this.completedAt = completedAt;
-    }
 }

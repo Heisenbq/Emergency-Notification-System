@@ -48,14 +48,13 @@ public class MessageRebalancing {
             notifications.stream()
                     .forEach(notification -> {
                         try {
-                            Contact contact = contactService.getContactById(notification.getContactId());
                             NotificationTemplate notificationTemplate = notificationTemplateRepository
                                     .findById(notificationSessionService
                                             .getNotificationSessionById(notification.getSessionId())
                                             .getTemplateId()
                                     ).orElseThrow();
 
-                            kafkaService.send(contact
+                            kafkaService.send(notification
                                     ,notificationTemplate);
 
                         }catch (JsonProcessingException exception) {

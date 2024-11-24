@@ -13,13 +13,13 @@ public class Notification {
     private Long id;
 
     private Long sessionId;
-    private Long contactId;
+    @ManyToOne
+    @JoinColumn(name = "contact_id")
+    private Contact contact;
 
     private String status;
     private String errorMessage;
-    private Integer sendAttempts;
-    private Timestamp lastAttemptAt;
-    private Timestamp createdAt;
+
 
     public Long getId() {
         return id;
@@ -37,12 +37,8 @@ public class Notification {
         this.sessionId = sessionId;
     }
 
-    public Long getContactId() {
-        return contactId;
-    }
-
-    public void setContactId(Long contactId) {
-        this.contactId = contactId;
+    public Contact getContact() {
+        return contact;
     }
 
     public String getStatus() {
@@ -61,42 +57,4 @@ public class Notification {
         this.errorMessage = errorMessage;
     }
 
-    public Integer getSendAttempts() {
-        return sendAttempts;
-    }
-
-    public void setSendAttempts(Integer sendAttempts) {
-        this.sendAttempts = sendAttempts;
-    }
-
-    public Timestamp getLastAttemptAt() {
-        return lastAttemptAt;
-    }
-
-    public void setLastAttemptAt(Timestamp lastAttemptAt) {
-        this.lastAttemptAt = lastAttemptAt;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    @PrePersist
-    public void onCreatedAt(){
-        this.createdAt = Timestamp.valueOf(LocalDateTime.now());
-    }
-
-    @Override
-    public String toString() {
-        return "Notifications{" +
-                "id=" + id +
-                ", sessionId=" + sessionId +
-                ", contactId=" + contactId +
-                ", status='" + status + '\'' +
-                ", errorMessage='" + errorMessage + '\'' +
-                ", sendAttempts=" + sendAttempts +
-                ", lastAttemptAt=" + lastAttemptAt +
-                ", createdAt=" + createdAt +
-                '}';
-    }
 }
