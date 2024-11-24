@@ -21,6 +21,10 @@ public class Notification {
     private String errorMessage;
 
 
+    private Integer sendAttempts;
+    private Timestamp lastAttemptAt;
+    private Timestamp createdAt;
+
     public Long getId() {
         return id;
     }
@@ -41,6 +45,7 @@ public class Notification {
         return contact;
     }
 
+
     public String getStatus() {
         return status;
     }
@@ -55,6 +60,26 @@ public class Notification {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public Integer getSendAttempts() {
+        return sendAttempts;
+    }
+
+    public void setSendAttempts(Integer sendAttempts) {
+        this.sendAttempts = sendAttempts;
+    }
+
+    public Timestamp getLastAttemptAt() {
+        return lastAttemptAt;
+    }
+
+    public void setLastAttemptAt(Timestamp lastAttemptAt) {
+        this.lastAttemptAt = lastAttemptAt;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 
 }

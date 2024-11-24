@@ -41,10 +41,8 @@ public class MessageRebalancing {
     // once in 30 sec
     @Scheduled(fixedRate = 30000)
     public void rebalanceMessages() {
-        System.out.println("ioio: ");
         try {
             List<Notification> notifications= notificationService.getNotificationsByStatus(NotificationStatus.FAILED);
-            System.out.println(notifications.toString());
             notifications.stream()
                     .forEach(notification -> {
                         try {

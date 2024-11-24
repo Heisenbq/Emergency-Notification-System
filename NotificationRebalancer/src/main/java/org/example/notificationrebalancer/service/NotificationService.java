@@ -19,30 +19,7 @@ public class NotificationService {
     }
 
     public List<Notification> getNotificationsByStatus(NotificationStatus notificationStatus) {
-        return notificationRepository.findByStatus(notificationStatus.toString().toLowerCase());
+        return notificationRepository.findByStatusWithAttemptsLessThan5(notificationStatus.toString().toLowerCase());
     }
 
-
-
-//    public void createNotification(Notification notification){
-//        try {
-//            notificationRepository.save(notification);
-//        } catch (DataIntegrityViolationException exception) {
-//            throw new DataIntegrityViolationException("Уникальность каких то данных была нарушена!");
-//        }
-//    }
-//
-//    public void createNotification(Long sessionId, Long contactId, NotificationStatus status, String errorMessage){
-//        Notification notification = new Notification();
-//        notification.setSessionId(sessionId);
-//        notification.setContactId(contactId                                                                                                                                                                 );
-//        notification.setStatus(status.toString().toLowerCase());
-//        notification.setErrorMessage(errorMessage);
-//
-//        try {
-//            notificationRepository.save(notification);
-//        } catch (DataIntegrityViolationException exception) {
-//            throw new DataIntegrityViolationException("Уникальность каких то данных была нарушена!");
-//        }
-//    }
 }
