@@ -1,10 +1,13 @@
 package org.example.notificationrebalancer.main_process;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.notificationrebalancer.Enums.NotificationStatus;
 import org.example.notificationrebalancer.db.entity.Contact;
 import org.example.notificationrebalancer.db.entity.Notification;
 import org.example.notificationrebalancer.db.entity.NotificationSession;
+import org.example.notificationrebalancer.db.entity.NotificationTemplate;
+import org.example.notificationrebalancer.db.repository.NotificationTemplateRepository;
 import org.example.notificationrebalancer.kafka.KafkaService;
 import org.example.notificationrebalancer.service.ContactService;
 import org.example.notificationrebalancer.service.NotificationService;
@@ -22,25 +25,42 @@ public class MessageRebalancing {
     private final NotificationService notificationService;
     private final ContactService contactService;
     private final NotificationSessionService notificationSessionService;
+    private final NotificationTemplateRepository notificationTemplateRepository;
 
     @Autowired
-    public MessageRebalancing(KafkaService kafkaService, NotificationService notificationService,ContactService contactService,NotificationSessionService notificationSessionService) {
+    public MessageRebalancing(KafkaService kafkaService, NotificationService notificationService
+            ,ContactService contactService,NotificationSessionService notificationSessionService
+            ,NotificationTemplateRepository notificationTemplateRepository) {
         this.kafkaService = kafkaService;
         this.notificationService = notificationService;
         this.contactService = contactService;
         this.notificationSessionService = notificationSessionService;
+        this.notificationTemplateRepository = notificationTemplateRepository;
     }
 
     // once in 30 sec
     @Scheduled(fixedRate = 30000)
     public void rebalanceMessages() {
+        System.out.println("ioio: ");
         try {
             List<Notification> notifications= notificationService.getNotificationsByStatus(NotificationStatus.FAILED);
+            System.out.println(notifications.toString());
             notifications.stream()
                     .forEach(notification -> {
-                        kafkaService.send(notification.getContactId()
-                                ,notificationSessionService
-                                        .getNotificationSessionById(notification.getSessionId()).getTemplateId());
+                        try {
+                            Contact contact = contactService.getContactById(notification.getContactId());
+                            NotificationTemplate notificationTemplate = notificationTemplateRepository
+                                    .findById(notificationSessionService
+                                            .getNotificationSessionById(notification.getSessionId())
+                                            .getTemplateId()
+                                    ).orElseThrow();
+
+                            kafkaService.send(contact
+                                    ,notificationTemplate);
+
+                        }catch (JsonProcessingException exception) {
+                            exception.printStackTrace();
+                        }
                     });
         }catch (Exception ex) {
             ex.printStackTrace();

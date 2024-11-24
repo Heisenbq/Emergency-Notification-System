@@ -1,7 +1,10 @@
 package org.example.notificationrebalancer.kafka;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.admin.NewTopic;
+import org.example.notificationrebalancer.db.entity.Contact;
+import org.example.notificationrebalancer.db.entity.NotificationTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,14 +23,13 @@ public class KafkaService {
     }
 
 
-    public void send(Long contactId,Long templateId) {
-        try {
-            Map<String,String> map = new HashMap<>();
-            map.put("contact_id",contactId.toString());
-            map.put("template_id",templateId.toString());
-            kafkaProducer.sendMessage(map);
-        }catch (Exception ex){
-            System.err.println(ex);
-        }
+    public void send(Contact contact, NotificationTemplate notificationTemplate) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String formattedContact = objectMapper.writeValueAsString(contact);
+        String formattedTemplate = objectMapper.writeValueAsString(notificationTemplate);
+        Map<String,String> map = new HashMap<>();
+        map.put("contact",formattedContact);
+        map.put("template",formattedTemplate);
+        kafkaProducer.sendMessage(map);
     }
 }
