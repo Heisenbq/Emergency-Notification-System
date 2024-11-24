@@ -31,20 +31,17 @@ public class MessageRebalancing {
         this.notificationSessionService = notificationSessionService;
     }
 
-    // once in 5 sec
-    @Scheduled(fixedRate = 5000)
+    // once in 30 sec
+    @Scheduled(fixedRate = 30000)
     public void rebalanceMessages() {
         try {
             List<Notification> notifications= notificationService.getNotificationsByStatus(NotificationStatus.FAILED);
-            List<Contact> contacts = new ArrayList<>();
             notifications.stream()
                     .forEach(notification -> {
-                        notificationSessionService.getNotificationSessionById(notification.getSessionId()).getTemplateId();
-                        contacts.add(contactService.getContactById(notification.getContactId()));
+                        kafkaService.send(notification.getContactId()
+                                ,notificationSessionService
+                                        .getNotificationSessionById(notification.getSessionId()).getTemplateId());
                     });
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonFormattedContacts = objectMapper.writeValueAsString(contacts);
-
         }catch (Exception ex) {
             ex.printStackTrace();
         }
